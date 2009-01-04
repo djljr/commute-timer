@@ -43,9 +43,21 @@ public class CommuteTimeDaoImpl implements CommuteTimeDao
 	private void updateRecord(CommuteEvent commuteEvent, Date day, Date timestamp)
 	{
 		SQLiteDatabase db = databaseHelper.getWritableDatabase();
-		String updateQuery = "update daily_records set %s = ? where day = ?";
+		String updateQuery;
+		Object[] params;
+		if (timestamp == null)
+		{
+			updateQuery = "update daily_records set %s = NULL where day = ?";
+			params = new Object[] { DatabaseHelper.f(day) };
+		}
+		else
+		{
+			updateQuery = "update daily_records set %s = ? where day = ?";
+			params = new Object[] { DatabaseHelper.f_t(timestamp), DatabaseHelper.f(day) };
+		}
+		
 		updateQuery = String.format(updateQuery, commuteEvent.dbField());
-		db.execSQL(updateQuery, new Object[] { DatabaseHelper.f_t(timestamp), DatabaseHelper.f(day) });
+		db.execSQL(updateQuery, params);
 	}
 
 	public Date getTimeStampByCommuteEventAndDay(CommuteEvent commuteEvent, Date day)
@@ -58,6 +70,8 @@ public class CommuteTimeDaoImpl implements CommuteTimeDao
 		int columnIndex = cursor.getColumnIndexOrThrow(commuteEvent.dbField());
 		String strTimestamp = cursor.getString(columnIndex);
 		cursor.close();
+		if (strTimestamp == null)
+			return null;
 		return DatabaseHelper.p_t(strTimestamp);
 	}
 }

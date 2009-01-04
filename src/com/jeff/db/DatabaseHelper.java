@@ -35,12 +35,16 @@ public class DatabaseHelper extends SQLiteOpenHelper
 	
 	public static String f(Date date)
 	{
+		if (date == null)
+			return "null";
 		SimpleDateFormat fmt = new SimpleDateFormat(DATE_FORMAT);
 		return fmt.format(date);
 	}
 
 	public static String f_t(Date timestamp)
 	{
+		if (timestamp == null)
+			return "null";
 		SimpleDateFormat fmt = new SimpleDateFormat(TIMESTAMP_FORMAT);
 		return fmt.format(timestamp);
 	}
