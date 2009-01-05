@@ -24,25 +24,6 @@ public class CommuteTimer extends Activity
 		initialize();
 	}
 
-	private void initialize()
-	{
-		Date today = new Date();
-		
-		for (CommuteEvent commuteEvent : CommuteEvent.values())
-		{
-			Button button = (Button) findViewById(commuteEvent.buttonViewId());
-			button.setOnClickListener(new RecordTimeOnClickListener((TextView) findViewById(commuteEvent.textViewId()), commuteEvent, databaseHelper));
-			button.setOnLongClickListener(new GenericOnLongClickListener((TextView) findViewById(commuteEvent.textViewId()), commuteEvent, databaseHelper));
-			
-			TextView tv = (TextView) findViewById(commuteEvent.textViewId());
-			Date timestamp = commuteTimeDao.getTimeStampByCommuteEventAndDay(commuteEvent, today);
-			if (timestamp == null)
-				tv.setText("");
-			else
-				tv.setText(DatabaseHelper.d_t(timestamp));
-		}
-	}
-	
 	@Override
 	protected void onPause()
 	{
@@ -62,6 +43,25 @@ public class CommuteTimer extends Activity
 	{
 		super.onDestroy();
 		closeDatabase();
+	}
+	
+	private void initialize()
+	{
+		Date today = new Date();
+		
+		for (CommuteEvent commuteEvent : CommuteEvent.values())
+		{
+			Button button = (Button) findViewById(commuteEvent.buttonViewId());
+			button.setOnClickListener(new RecordTimeOnClickListener((TextView) findViewById(commuteEvent.textViewId()), commuteEvent, databaseHelper));
+			button.setOnLongClickListener(new GenericOnLongClickListener((TextView) findViewById(commuteEvent.textViewId()), commuteEvent, databaseHelper));
+			
+			TextView tv = (TextView) findViewById(commuteEvent.textViewId());
+			Date timestamp = commuteTimeDao.getTimeStampByCommuteEventAndDay(commuteEvent, today);
+			if (timestamp == null)
+				tv.setText("");
+			else
+				tv.setText(DatabaseHelper.d_t(timestamp));
+		}
 	}
 
 	private void closeDatabase()

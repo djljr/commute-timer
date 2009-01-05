@@ -42,10 +42,10 @@ public class DatabaseHelper extends SQLiteOpenHelper
 		return fmt.format(date);
 	}
 
-	public static long f_t(Date timestamp)
+	public static Long f_t(Date timestamp)
 	{
 		if (timestamp == null)
-			return 0;
+			return null;
 		return timestamp.getTime();
 	}
 

@@ -68,6 +68,8 @@ public class CommuteTimeDaoImpl implements CommuteTimeDao
 			return null;
 		
 		int columnIndex = cursor.getColumnIndexOrThrow(commuteEvent.dbField());
+		if (cursor.isNull(columnIndex))
+			return null;
 		long strTimestamp = cursor.getLong(columnIndex);
 		cursor.close();
 		return DatabaseHelper.p_t(strTimestamp);
