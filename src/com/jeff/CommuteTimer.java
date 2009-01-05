@@ -2,8 +2,6 @@ package com.jeff;
 
 import java.util.Date;
 
-import org.apache.http.impl.cookie.DateUtils;
-
 import com.jeff.db.CommuteTimeDao;
 import com.jeff.db.CommuteTimeDaoImpl;
 import com.jeff.db.DatabaseHelper;
@@ -41,7 +39,7 @@ public class CommuteTimer extends Activity
 			if (timestamp == null)
 				tv.setText("");
 			else
-				tv.setText(DateUtils.formatDate(timestamp, "MM/dd/yyyy HH:mm:ss"));
+				tv.setText(DatabaseHelper.d_t(timestamp));
 		}
 	}
 	

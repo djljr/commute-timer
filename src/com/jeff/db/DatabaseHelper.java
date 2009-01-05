@@ -12,6 +12,7 @@ public class DatabaseHelper extends SQLiteOpenHelper
 {
 	public static final String DATE_FORMAT = "yyyy-MM-dd";
 	public static final String TIMESTAMP_FORMAT = "yyyy-MM-dd HH:mm:ss";
+	public static final String DISPLAY_FORMAT = "MM/dd/yyyy HH:mm:ss";
 	public static final String DATABASE_NAME = "commute_time.db";
 	public static final int VERSION = 1;
 
@@ -23,7 +24,7 @@ public class DatabaseHelper extends SQLiteOpenHelper
 	@Override
 	public void onCreate(SQLiteDatabase database)
 	{
-		String createTableQuery = "create table daily_records(day date unique, left_home datetime, train_platform1 datetime, at_work datetime, left_work datetime, train_platform2 datetime, at_home datetime)";
+		String createTableQuery = "create table daily_records(day date unique, left_home integer, train_platform1 integer, at_work integer, left_work integer, train_platform2 integer, at_home integer)";
 		database.execSQL(createTableQuery);
 	}
 
@@ -41,26 +42,20 @@ public class DatabaseHelper extends SQLiteOpenHelper
 		return fmt.format(date);
 	}
 
-	public static String f_t(Date timestamp)
+	public static long f_t(Date timestamp)
 	{
 		if (timestamp == null)
-			return "null";
-		SimpleDateFormat fmt = new SimpleDateFormat(TIMESTAMP_FORMAT);
-		return fmt.format(timestamp);
+			return 0;
+		return timestamp.getTime();
 	}
 
-	public static Date p_t(String strTimestamp)
+	public static Date p_t(long timestamp)
 	{
-		try
-		{
-			SimpleDateFormat fmt = new SimpleDateFormat(TIMESTAMP_FORMAT);
-			Date date = fmt.parse(strTimestamp);
-			return date;
-		}
-		catch (ParseException e)
-		{
-			throw new RuntimeException("Error parsing date: " + strTimestamp, e);
-		}
+		return new Date(timestamp);
 	}
 
+	public static String d_t(Date timestamp)
+	{
+		return new SimpleDateFormat(DISPLAY_FORMAT).format(timestamp);
+	}
 }

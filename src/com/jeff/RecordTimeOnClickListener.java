@@ -7,6 +7,7 @@ import com.jeff.db.CommuteTimeDao;
 import com.jeff.db.CommuteTimeDaoImpl;
 import com.jeff.db.DatabaseHelper;
 
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.TextView;
@@ -17,6 +18,8 @@ public class RecordTimeOnClickListener implements OnClickListener
 	private SimpleDateFormat fmt = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
 	private CommuteEvent commuteEvent;
 	private DatabaseHelper databaseHelper;
+	
+	private String tag = "onClick";
 	
 	public RecordTimeOnClickListener(TextView textView, CommuteEvent commuteEvent, DatabaseHelper databaseHelper)
 	{
@@ -29,7 +32,10 @@ public class RecordTimeOnClickListener implements OnClickListener
 	public void onClick(View view)
 	{
 		Date now = new Date();
-		this.textView.setText(fmt.format(now));
+		String date = fmt.format(now);
+		Log.i(tag, now.toString());
+		Log.i(tag, date);
+		this.textView.setText(date);
 		CommuteTimeDao commuteTimeDao = new CommuteTimeDaoImpl(databaseHelper);
 		commuteTimeDao.updateTime(commuteEvent, now, now);
 	}
