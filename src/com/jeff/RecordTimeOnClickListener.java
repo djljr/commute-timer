@@ -19,7 +19,7 @@ public class RecordTimeOnClickListener implements OnClickListener
 	private CommuteEvent commuteEvent;
 	private DatabaseHelper databaseHelper;
 	
-	private String tag = "onClick";
+	private static final String TAG = "CommuteTimer";
 	
 	public RecordTimeOnClickListener(TextView textView, CommuteEvent commuteEvent, DatabaseHelper databaseHelper)
 	{
@@ -33,8 +33,8 @@ public class RecordTimeOnClickListener implements OnClickListener
 	{
 		Date now = new Date();
 		String date = fmt.format(now);
-		Log.i(tag, now.toString());
-		Log.i(tag, date);
+		Log.i(TAG, now.toString());
+		Log.i(TAG, date);
 		this.textView.setText(date);
 		CommuteTimeDao commuteTimeDao = new CommuteTimeDaoImpl(databaseHelper);
 		commuteTimeDao.updateTime(commuteEvent, now, now);

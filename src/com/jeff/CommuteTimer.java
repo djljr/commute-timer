@@ -7,7 +7,10 @@ import com.jeff.db.CommuteTimeDaoImpl;
 import com.jeff.db.DatabaseHelper;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -15,6 +18,26 @@ public class CommuteTimer extends Activity
 {
 	private DatabaseHelper databaseHelper = new DatabaseHelper(this);
 	private CommuteTimeDao commuteTimeDao = new CommuteTimeDaoImpl(databaseHelper);
+	
+	private static final int STATS_ID = Menu.FIRST;
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		super.onCreateOptionsMenu(menu);
+		menu.add(0, STATS_ID, 0, R.string.menu_stats).setIcon(R.drawable.stats);
+		return true;
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+        case STATS_ID:
+            // Launch activity to insert a new item
+            startActivity(new Intent(Intent.ACTION_VIEW, getIntent().getData()));
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+	}
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState)
