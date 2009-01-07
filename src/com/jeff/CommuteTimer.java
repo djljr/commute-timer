@@ -32,8 +32,9 @@ public class CommuteTimer extends Activity
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
         case STATS_ID:
-            // Launch activity to insert a new item
-            startActivity(new Intent(Intent.ACTION_VIEW, getIntent().getData()));
+        	Intent intent = new Intent();
+        	intent.setClassName("com.jeff", "com.jeff.CommuteEventStats");
+			startActivity(intent);
             return true;
         }
         return super.onOptionsItemSelected(item);

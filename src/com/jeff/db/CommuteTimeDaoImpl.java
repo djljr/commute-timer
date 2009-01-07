@@ -63,7 +63,7 @@ public class CommuteTimeDaoImpl implements CommuteTimeDao
 	public Date getTimeStampByCommuteEventAndDay(CommuteEvent commuteEvent, Date day)
 	{
 		SQLiteDatabase db = databaseHelper.getReadableDatabase();
-		Cursor cursor = db.query("daily_records", new String[] { commuteEvent.dbField() }, null, new String[] { }, null, null, null);
+		Cursor cursor = db.query("daily_records", new String[] { commuteEvent.dbField() }, "day = ?", new String[] { DatabaseHelper.f(day) }, null, null, null);
 		if (!cursor.moveToFirst())
 			return null;
 		
@@ -73,5 +73,20 @@ public class CommuteTimeDaoImpl implements CommuteTimeDao
 		long strTimestamp = cursor.getLong(columnIndex);
 		cursor.close();
 		return DatabaseHelper.p_t(strTimestamp);
+	}
+
+	@Override
+	public String[] fetchStats() 
+	{
+		SQLiteDatabase db = databaseHelper.getReadableDatabase();
+		String sql = "select avg(at_work-left_home) as avg_to_work_commute, avg(at_home-left_work) as avg_to_home_commute from daily_records;";
+		Cursor c = db.rawQuery(sql, new String[] { });
+		if(!c.moveToFirst())
+			return new String[] { };
+		
+		long toWorkDuration = c.getLong(c.getColumnIndex("avg_to_work_commute"));
+		long toHomeDuration = c.getLong(c.getColumnIndex("avg_to_home_commute"));
+		
+		return new String[] { "Home to Work: " + toWorkDuration, "Work to Home: " + toHomeDuration };
 	}
 }
