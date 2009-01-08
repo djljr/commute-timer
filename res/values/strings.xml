@@ -2,4 +2,6 @@
 <resources>
     
     <string name="app_name">CommuteTimer</string>
+<string name="menu_stats">Statistics</string>
+<string name="menu_clear">Clear DB</string>
 </resources>

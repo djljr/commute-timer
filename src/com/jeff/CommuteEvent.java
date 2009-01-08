@@ -40,8 +40,6 @@ public enum CommuteEvent
 	};
 
 	abstract public String dbField();
-	
 	abstract public int buttonViewId();
-	
 	abstract public int textViewId();
 }
