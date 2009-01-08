@@ -16,4 +16,6 @@ public interface CommuteTimeDao
 
 	String[] fetchStats();
 
+	void clearDb();
+
 }

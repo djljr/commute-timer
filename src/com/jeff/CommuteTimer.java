@@ -20,11 +20,13 @@ public class CommuteTimer extends Activity
 	private CommuteTimeDao commuteTimeDao = new CommuteTimeDaoImpl(databaseHelper);
 	
 	private static final int STATS_ID = Menu.FIRST;
+	private static final int CLEAR_ID = Menu.FIRST + 1;
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		super.onCreateOptionsMenu(menu);
 		menu.add(0, STATS_ID, 0, R.string.menu_stats).setIcon(R.drawable.stats);
+		menu.add(0, CLEAR_ID, 0, R.string.menu_clear).setIcon(R.drawable.clear);
 		return true;
 	}
 	
@@ -36,6 +38,9 @@ public class CommuteTimer extends Activity
         	intent.setClassName("com.jeff", "com.jeff.CommuteEventStats");
 			startActivity(intent);
             return true;
+        case CLEAR_ID:
+        	commuteTimeDao.clearDb();
+        	return true;
         }
         return super.onOptionsItemSelected(item);
 	}

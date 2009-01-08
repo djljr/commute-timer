@@ -89,4 +89,11 @@ public class CommuteTimeDaoImpl implements CommuteTimeDao
 		
 		return new String[] { "Home to Work: " + toWorkDuration, "Work to Home: " + toHomeDuration };
 	}
+
+	@Override
+	public void clearDb() 
+	{
+		SQLiteDatabase db = databaseHelper.getWritableDatabase();
+		db.delete("daily_records", null, new String[] { });
+	}
 }
