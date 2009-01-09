@@ -58,12 +58,13 @@ public class CommuteHistoryDetail extends Activity
 	{	
 		for (CommuteEvent commuteEvent : CommuteEvent.values())
 		{
+			Date timestamp = commuteTimeDao.getTimeStampByCommuteEventAndId(commuteEvent, id);
+			
 			Button button = (Button) findViewById(commuteEvent.buttonViewId());
 			button.setOnLongClickListener(new GenericOnLongClickListener((TextView) findViewById(commuteEvent
-					.textViewId()), commuteEvent, databaseHelper));
+					.textViewId()), commuteEvent, timestamp, databaseHelper));
 			
 			TextView tv = (TextView) findViewById(commuteEvent.textViewId());
-			Date timestamp = commuteTimeDao.getTimeStampByCommuteEventAndId(commuteEvent, id);
 			if (timestamp == null)
 				tv.setText("");
 			else

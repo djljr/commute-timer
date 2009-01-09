@@ -91,7 +91,7 @@ public class CommuteTimer extends Activity
 			button.setOnClickListener(new RecordTimeOnClickListener((TextView) findViewById(commuteEvent.textViewId()),
 					commuteEvent, databaseHelper));
 			button.setOnLongClickListener(new GenericOnLongClickListener((TextView) findViewById(commuteEvent
-					.textViewId()), commuteEvent, databaseHelper));
+					.textViewId()), commuteEvent, new Date(), databaseHelper));
 
 			TextView tv = (TextView) findViewById(commuteEvent.textViewId());
 			Date timestamp = commuteTimeDao.getTimeStampByCommuteEventAndDay(commuteEvent, today);
