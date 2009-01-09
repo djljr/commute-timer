@@ -19,7 +19,6 @@ import android.widget.SimpleCursorAdapter;
 public class CommuteEventStats extends ListActivity
 {
 	private static final String TAG = "CommuteTimer";
-	private Uri mUri;
 	
 	private DatabaseHelper databaseHelper;
 	private CommuteTimeDao commuteTimeDao;
@@ -36,6 +35,27 @@ public class CommuteEventStats extends ListActivity
 		fillStats();
 	}
 
+	@Override
+	protected void onDestroy()
+	{
+		super.onDestroy();
+		closeDatabase();
+	}
+	
+	@Override
+	protected void onPause()
+	{
+		super.onPause();
+		closeDatabase();
+	}
+	
+	@Override
+	protected void onResume()
+	{
+		super.onResume();
+		fillStats();
+	}
+	
 	private void fillStats() 
 	{
 		String[] statItems = commuteTimeDao.fetchStats();
@@ -43,5 +63,9 @@ public class CommuteEventStats extends ListActivity
 		ListAdapter stats = new ArrayAdapter<String>(this,
 				R.layout.stats_row, statItems);
 		setListAdapter(stats);
+	}
+	private void closeDatabase()
+	{
+		databaseHelper.close();
 	}
 }

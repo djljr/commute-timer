@@ -14,7 +14,7 @@ public class DatabaseHelper extends SQLiteOpenHelper
 	public static final String TIMESTAMP_FORMAT = "yyyy-MM-dd HH:mm:ss";
 	public static final String DISPLAY_FORMAT = "MM/dd/yyyy HH:mm:ss";
 	public static final String DATABASE_NAME = "commute_time.db";
-	public static final int VERSION = 1;
+	public static final int VERSION = 2;
 
 	public DatabaseHelper(Context context)
 	{
@@ -31,7 +31,7 @@ public class DatabaseHelper extends SQLiteOpenHelper
 	@Override
 	public void onUpgrade(SQLiteDatabase database, int oldVersion, int newVersion)
 	{
-
+		throw new RuntimeException("need to finish writing this method");
 	}
 	
 	public static String f(Date date)
@@ -57,5 +57,14 @@ public class DatabaseHelper extends SQLiteOpenHelper
 	public static String d_t(Date timestamp)
 	{
 		return new SimpleDateFormat(DISPLAY_FORMAT).format(timestamp);
+	}
+	
+	public static String formatDuration(long duration)
+	{
+		long seconds = duration / 1000;
+		long minutes = seconds / 60;
+		seconds = seconds % 60;
+		
+		return minutes + "m " + seconds + "s";
 	}
 }

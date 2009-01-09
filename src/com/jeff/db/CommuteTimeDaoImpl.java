@@ -87,7 +87,11 @@ public class CommuteTimeDaoImpl implements CommuteTimeDao
 		long toWorkDuration = c.getLong(c.getColumnIndex("avg_to_work_commute"));
 		long toHomeDuration = c.getLong(c.getColumnIndex("avg_to_home_commute"));
 		
-		return new String[] { "Home to Work: " + toWorkDuration, "Work to Home: " + toHomeDuration };
+		return new String[] {
+				"Home to Work: "
+						+ DatabaseHelper.formatDuration(toWorkDuration),
+				"Work to Home: "
+						+ DatabaseHelper.formatDuration(toHomeDuration) };
 	}
 
 	@Override
@@ -95,5 +99,15 @@ public class CommuteTimeDaoImpl implements CommuteTimeDao
 	{
 		SQLiteDatabase db = databaseHelper.getWritableDatabase();
 		db.delete("daily_records", null, new String[] { });
+	}
+
+	@Override
+	public Cursor fetchDaysWithData()
+	{
+		SQLiteDatabase db = databaseHelper.getReadableDatabase();
+		String sql = "select day as _id, day from daily_records order by day";
+		Cursor c = db.rawQuery(sql, null);
+		
+		return c;
 	}
 }

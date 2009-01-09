@@ -4,4 +4,6 @@
     <string name="app_name">CommuteTimer</string>
 <string name="menu_stats">Statistics</string>
 <string name="menu_clear">Clear DB</string>
+<string name="menu_history">History</string>
+<string name="menu_delete">Delete</string>
 </resources>

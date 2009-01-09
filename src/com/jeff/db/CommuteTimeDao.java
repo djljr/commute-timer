@@ -18,4 +18,6 @@ public interface CommuteTimeDao
 
 	void clearDb();
 
+	Cursor fetchDaysWithData();
+
 }
