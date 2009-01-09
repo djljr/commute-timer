@@ -59,7 +59,28 @@ public class CommuteTimeDaoImpl implements CommuteTimeDao
 		updateQuery = String.format(updateQuery, commuteEvent.dbField());
 		db.execSQL(updateQuery, params);
 	}
+	
+	public void deleteRecord(Long id)
+	{
+		SQLiteDatabase db = databaseHelper.getWritableDatabase();
+		db.delete("daily_records", "_id=?", new String[] {id.toString()});
+	}
 
+	public Date getTimeStampByCommuteEventAndId(CommuteEvent commuteEvent, Long id)
+	{
+		SQLiteDatabase db = databaseHelper.getReadableDatabase();
+		Cursor cursor = db.query("daily_records", new String[] { commuteEvent.dbField() }, "_id = ?", new String[] { id.toString() }, null, null, null);
+		if (!cursor.moveToFirst())
+			return null;
+		
+		int columnIndex = cursor.getColumnIndexOrThrow(commuteEvent.dbField());
+		if (cursor.isNull(columnIndex))
+			return null;
+		long strTimestamp = cursor.getLong(columnIndex);
+		cursor.close();
+		return DatabaseHelper.p_t(strTimestamp);		
+	}
+	
 	public Date getTimeStampByCommuteEventAndDay(CommuteEvent commuteEvent, Date day)
 	{
 		SQLiteDatabase db = databaseHelper.getReadableDatabase();
@@ -105,7 +126,7 @@ public class CommuteTimeDaoImpl implements CommuteTimeDao
 	public Cursor fetchDaysWithData()
 	{
 		SQLiteDatabase db = databaseHelper.getReadableDatabase();
-		String sql = "select day as _id, day from daily_records order by day";
+		String sql = "select _id, day from daily_records order by day";
 		Cursor c = db.rawQuery(sql, null);
 		
 		return c;

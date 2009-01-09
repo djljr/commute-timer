@@ -31,7 +31,24 @@ public class DatabaseHelper extends SQLiteOpenHelper
 	@Override
 	public void onUpgrade(SQLiteDatabase database, int oldVersion, int newVersion)
 	{
-		throw new RuntimeException("need to finish writing this method");
+		if(oldVersion < 2)
+		{
+			database.beginTransaction();
+			try
+			{
+				database.execSQL("create temporary table t1_backup(day, left_home, train_platform1, at_work, left_work, train_platform2, at_home)");
+				database.execSQL("insert into t1_backup select day, left_home, train_platform1, at_work, left_work, train_platform2, at_home from daily_records");
+				database.execSQL("drop table daily_records");
+				database.execSQL("create table daily_records(_id integer primary key autoincrement, day text, left_home int, train_platform1 int, at_work int, left_work int, train_platform2 int, at_home int)");
+				database.execSQL("insert into daily_records (day, left_home, train_platform1, at_work, left_work, train_platform2, at_home) select day, left_home, train_platform1, at_work, left_work, train_platform2, at_home from t1_backup");  
+				database.execSQL("drop table t1_backup");
+				database.setTransactionSuccessful();
+			}
+			finally
+			{
+				database.endTransaction();
+			}
+		}
 	}
 	
 	public static String f(Date date)

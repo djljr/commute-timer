@@ -26,10 +26,32 @@ public class CommuteHistory extends ListActivity
 	private static final String TAG = "CommuteTimer";
 
 	private static final int MENU_ITEM_DELETE = Menu.FIRST;
-	
+	private static final int CLEAR_ID = Menu.FIRST + 1;
+
 	private DatabaseHelper databaseHelper;
 	private CommuteTimeDao commuteTimeDao;
 
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu)
+	{
+		super.onCreateOptionsMenu(menu);
+		menu.add(0, CLEAR_ID, 0, R.string.menu_clear).setIcon(R.drawable.clear);
+		return true;
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item)
+	{
+		switch (item.getItemId())
+		{
+		case CLEAR_ID:
+			commuteTimeDao.clearDb();
+			fillHistory();
+			return true;
+		}
+		return super.onOptionsItemSelected(item);
+	}
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
@@ -71,7 +93,7 @@ public class CommuteHistory extends ListActivity
 	protected void onListItemClick(ListView l, View v, int position, long id)
 	{
     	Intent i = new Intent();
-    	i.putExtra("foo", "bar");
+    	i.putExtra("id", id);
     	i.setClassName("com.jeff", "com.jeff.CommuteHistoryDetail");
 		startActivity(i);
 	}
@@ -93,6 +115,8 @@ public class CommuteHistory extends ListActivity
 		switch (item.getItemId())
 		{
 		case MENU_ITEM_DELETE:
+			commuteTimeDao.deleteRecord(info.id);
+			fillHistory();
 			return true;
 		}
 		return false;

@@ -17,7 +17,7 @@ public class CommuteHistoryDetail extends Activity
 	private DatabaseHelper databaseHelper;
 	private CommuteTimeDao commuteTimeDao;
 	
-	private Date curDate;
+	private Long id;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState)
@@ -29,7 +29,7 @@ public class CommuteHistoryDetail extends Activity
 		
 		final Intent intent = getIntent();
 		
-		curDate = new Date(intent.getExtras().getLong("timestamp"));
+		id = intent.getExtras().getLong("id");
 		initialize();
 	}
 
@@ -56,11 +56,10 @@ public class CommuteHistoryDetail extends Activity
 	
 	private void initialize()
 	{	
-		Date today = curDate;
 		for (CommuteEvent commuteEvent : CommuteEvent.values())
 		{
 			TextView tv = (TextView) findViewById(commuteEvent.textViewId());
-			Date timestamp = commuteTimeDao.getTimeStampByCommuteEventAndDay(commuteEvent, today);
+			Date timestamp = commuteTimeDao.getTimeStampByCommuteEventAndId(commuteEvent, id);
 			if (timestamp == null)
 				tv.setText("");
 			else

@@ -18,46 +18,43 @@ public class CommuteTimer extends Activity
 {
 	private DatabaseHelper databaseHelper;
 	private CommuteTimeDao commuteTimeDao;
-	
+
 	private static final int STATS_ID = Menu.FIRST;
-	private static final int CLEAR_ID = Menu.FIRST + 1;
 	private static final int HISTORY_ID = Menu.FIRST + 2;
-	
+
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
+	public boolean onCreateOptionsMenu(Menu menu)
+	{
 		super.onCreateOptionsMenu(menu);
 		menu.add(0, STATS_ID, 0, R.string.menu_stats).setIcon(R.drawable.stats);
-		menu.add(0, CLEAR_ID, 0, R.string.menu_clear).setIcon(R.drawable.clear);
 		menu.add(0, HISTORY_ID, 0, R.string.menu_history).setIcon(R.drawable.history);
 		return true;
 	}
-	
+
 	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
+	public boolean onOptionsItemSelected(MenuItem item)
+	{
 		Intent intent = new Intent();
-		switch (item.getItemId()) {
-        case STATS_ID:
-        	intent.setClassName("com.jeff", "com.jeff.CommuteEventStats");
+		switch (item.getItemId())
+		{
+		case STATS_ID:
+			intent.setClassName("com.jeff", "com.jeff.CommuteEventStats");
 			startActivity(intent);
-            return true;
-        case CLEAR_ID:
-        	commuteTimeDao.clearDb();
-        	initialize();
-        	return true;
-        case HISTORY_ID:
-        	intent.setClassName("com.jeff", "com.jeff.CommuteHistory");
-        	startActivity(intent);
-        	return true;
-        }
-			
-        return super.onOptionsItemSelected(item);
+			return true;
+		case HISTORY_ID:
+			intent.setClassName("com.jeff", "com.jeff.CommuteHistory");
+			startActivity(intent);
+			return true;
+		}
+
+		return super.onOptionsItemSelected(item);
 	}
-	
+
 	@Override
 	public void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		databaseHelper =  new DatabaseHelper(this);
+		databaseHelper = new DatabaseHelper(this);
 		commuteTimeDao = new CommuteTimeDaoImpl(databaseHelper);
 		setContentView(R.layout.main);
 		initialize();
@@ -69,7 +66,7 @@ public class CommuteTimer extends Activity
 		super.onPause();
 		closeDatabase();
 	}
-	
+
 	@Override
 	protected void onResume()
 	{
@@ -83,17 +80,19 @@ public class CommuteTimer extends Activity
 		super.onDestroy();
 		closeDatabase();
 	}
-	
+
 	private void initialize()
 	{
 		Date today = new Date();
-		
+
 		for (CommuteEvent commuteEvent : CommuteEvent.values())
 		{
 			Button button = (Button) findViewById(commuteEvent.buttonViewId());
-			button.setOnClickListener(new RecordTimeOnClickListener((TextView) findViewById(commuteEvent.textViewId()), commuteEvent, databaseHelper));
-			button.setOnLongClickListener(new GenericOnLongClickListener((TextView) findViewById(commuteEvent.textViewId()), commuteEvent, databaseHelper));
-			
+			button.setOnClickListener(new RecordTimeOnClickListener((TextView) findViewById(commuteEvent.textViewId()),
+					commuteEvent, databaseHelper));
+			button.setOnLongClickListener(new GenericOnLongClickListener((TextView) findViewById(commuteEvent
+					.textViewId()), commuteEvent, databaseHelper));
+
 			TextView tv = (TextView) findViewById(commuteEvent.textViewId());
 			Date timestamp = commuteTimeDao.getTimeStampByCommuteEventAndDay(commuteEvent, today);
 			if (timestamp == null)

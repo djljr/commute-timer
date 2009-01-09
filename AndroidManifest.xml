@@ -20,6 +20,10 @@
 <category android:name="android.intent.category.DEFAULT"></category>
 </intent-filter>
 </activity>
+<activity android:name="CommuteHistoryDetail"><intent-filter><action android:name="android.intent.action.MAIN"></action>
+<category android:name="android.intent.category.DEFAULT"></category>
+</intent-filter>
+</activity>
 </application>
 
 
