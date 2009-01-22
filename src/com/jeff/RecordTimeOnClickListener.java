@@ -17,16 +17,16 @@ public class RecordTimeOnClickListener implements OnClickListener
 	private TextView textView;
 	private SimpleDateFormat fmt = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
 	private CommuteEvent commuteEvent;
-	private DatabaseHelper databaseHelper;
+	private CommuteTimeDao commuteTimeDao;
 	
 	private static final String TAG = "CommuteTimer";
 	
-	public RecordTimeOnClickListener(TextView textView, CommuteEvent commuteEvent, DatabaseHelper databaseHelper)
+	public RecordTimeOnClickListener(TextView textView, CommuteEvent commuteEvent, CommuteTimeDao commuteTimeDao)
 	{
 		super();
 		this.textView = textView;
 		this.commuteEvent = commuteEvent;
-		this.databaseHelper = databaseHelper;
+		this.commuteTimeDao = commuteTimeDao;
 	}
 
 	public void onClick(View view)
@@ -35,8 +35,7 @@ public class RecordTimeOnClickListener implements OnClickListener
 		String date = fmt.format(now);
 		Log.i(TAG, now.toString());
 		Log.i(TAG, date);
-		this.textView.setText(date);
-		CommuteTimeDao commuteTimeDao = new CommuteTimeDaoImpl(databaseHelper);
+		textView.setText(date);
 		commuteTimeDao.updateTime(commuteEvent, now, now);
 	}
 }

@@ -68,40 +68,60 @@ public class CommuteTimeDaoImpl implements CommuteTimeDao
 
 	public Date getTimeStampByCommuteEventAndId(CommuteEvent commuteEvent, Long id)
 	{
-		SQLiteDatabase db = databaseHelper.getReadableDatabase();
-		Cursor cursor = db.query("daily_records", new String[] { commuteEvent.dbField() }, "_id = ?", new String[] { id.toString() }, null, null, null);
-		if (!cursor.moveToFirst())
-			return null;
-		
-		int columnIndex = cursor.getColumnIndexOrThrow(commuteEvent.dbField());
-		if (cursor.isNull(columnIndex))
-			return null;
-		long strTimestamp = cursor.getLong(columnIndex);
-		cursor.close();
-		return DatabaseHelper.p_t(strTimestamp);		
+		Cursor cursor = null;
+		try
+		{
+			SQLiteDatabase db = databaseHelper.getReadableDatabase();
+			cursor = db.query("daily_records", new String[] { commuteEvent.dbField() }, "_id = ?", new String[] { id.toString() }, null, null, null);
+			if (!cursor.moveToFirst())
+				return null;
+			
+			int columnIndex = cursor.getColumnIndexOrThrow(commuteEvent.dbField());
+			if (cursor.isNull(columnIndex))
+				return null;
+			long strTimestamp = cursor.getLong(columnIndex);
+			cursor.close();
+			return DatabaseHelper.p_t(strTimestamp);
+		}
+		finally
+		{
+			if (cursor != null)
+				cursor.close();
+		}
 	}
 	
 	public Date getTimeStampByCommuteEventAndDay(CommuteEvent commuteEvent, Date day)
 	{
-		SQLiteDatabase db = databaseHelper.getReadableDatabase();
-		Cursor cursor = db.query("daily_records", new String[] { commuteEvent.dbField() }, "day = ?", new String[] { DatabaseHelper.f(day) }, null, null, null);
-		if (!cursor.moveToFirst())
-			return null;
-		
-		int columnIndex = cursor.getColumnIndexOrThrow(commuteEvent.dbField());
-		if (cursor.isNull(columnIndex))
-			return null;
-		long strTimestamp = cursor.getLong(columnIndex);
-		cursor.close();
-		return DatabaseHelper.p_t(strTimestamp);
+		Cursor cursor = null;
+		try
+		{
+			SQLiteDatabase db = databaseHelper.getReadableDatabase();
+			cursor = db.query("daily_records", new String[] { commuteEvent.dbField() }, "day = ?", new String[] { DatabaseHelper.f(day) }, null, null, null);
+			if (!cursor.moveToFirst())
+				return null;
+			
+			int columnIndex = cursor.getColumnIndexOrThrow(commuteEvent.dbField());
+			if (cursor.isNull(columnIndex))
+				return null;
+			long strTimestamp = cursor.getLong(columnIndex);
+			return DatabaseHelper.p_t(strTimestamp);
+		}
+		finally
+		{
+			if(cursor != null)
+				cursor.close();
+		}
 	}
 
 	@Override
 	public String[] fetchStats() 
 	{
+		Cursor c = null;
+		try
+		{
 		SQLiteDatabase db = databaseHelper.getReadableDatabase();
 		String sql = "select avg(at_work-left_home) as avg_to_work_commute, avg(at_home-left_work) as avg_to_home_commute from daily_records;";
-		Cursor c = db.rawQuery(sql, new String[] { });
+		c = db.rawQuery(sql, new String[] { });
 		if(!c.moveToFirst())
 			return new String[] { };
 		
@@ -113,6 +133,12 @@ public class CommuteTimeDaoImpl implements CommuteTimeDao
 						+ DatabaseHelper.formatDuration(toWorkDuration),
 				"Work to Home: "
 						+ DatabaseHelper.formatDuration(toHomeDuration) };
+		}
+		finally
+		{
+			if(c != null)
+				c.close();
+		}
 	}
 
 	@Override
@@ -125,10 +151,13 @@ public class CommuteTimeDaoImpl implements CommuteTimeDao
 	@Override
 	public Cursor fetchDaysWithData()
 	{
+		Cursor c = null;
+		
 		SQLiteDatabase db = databaseHelper.getReadableDatabase();
 		String sql = "select _id, day from daily_records order by day";
-		Cursor c = db.rawQuery(sql, null);
+		c = db.rawQuery(sql, null);
 		
 		return c;
+		
 	}
 }

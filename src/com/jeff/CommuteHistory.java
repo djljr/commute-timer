@@ -28,7 +28,6 @@ public class CommuteHistory extends ListActivity
 	private static final int MENU_ITEM_DELETE = Menu.FIRST;
 	private static final int CLEAR_ID = Menu.FIRST + 1;
 
-	private DatabaseHelper databaseHelper;
 	private CommuteTimeDao commuteTimeDao;
 
 	@Override
@@ -59,8 +58,7 @@ public class CommuteHistory extends ListActivity
 
 		setContentView(R.layout.history);
 		getListView().setOnCreateContextMenuListener(this);
-		databaseHelper = new DatabaseHelper(this);
-		commuteTimeDao = new CommuteTimeDaoImpl(databaseHelper);
+		commuteTimeDao = new CommuteTimeDaoImpl(new DatabaseHelper(this));
 		fillHistory();
 	}
 
@@ -123,20 +121,6 @@ public class CommuteHistory extends ListActivity
 	}
     
 	@Override
-	protected void onDestroy()
-	{
-		super.onDestroy();
-		closeDatabase();
-	}
-
-	@Override
-	protected void onPause()
-	{
-		super.onPause();
-		closeDatabase();
-	}
-
-	@Override
 	protected void onResume()
 	{
 		super.onResume();
@@ -145,15 +129,13 @@ public class CommuteHistory extends ListActivity
 
 	private void fillHistory()
 	{
-		Cursor historyItems = commuteTimeDao.fetchDaysWithData();
+		Cursor historyItems = null;
+
+		historyItems = commuteTimeDao.fetchDaysWithData();
 
 		ListAdapter history = new SimpleCursorAdapter(this, R.layout.history_row, historyItems, new String[] { "day" },
 				new int[] { android.R.id.text1 });
 		setListAdapter(history);
-	}
 
-	private void closeDatabase()
-	{
-		databaseHelper.close();
 	}
 }

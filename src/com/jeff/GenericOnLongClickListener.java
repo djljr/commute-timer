@@ -15,21 +15,20 @@ public class GenericOnLongClickListener implements OnLongClickListener
 	private TextView textView;
 	private CommuteEvent commuteEvent;
 	private Date timestamp;
-	private DatabaseHelper databaseHelper;
+	private CommuteTimeDao commuteTimeDao;
 
-	public GenericOnLongClickListener(TextView textView, CommuteEvent commuteEvent, Date timestamp, DatabaseHelper databaseHelper)
+	public GenericOnLongClickListener(TextView textView, CommuteEvent commuteEvent, Date timestamp, CommuteTimeDao commuteTimeDao)
 	{
 		this.textView = textView;
 		this.commuteEvent = commuteEvent;
 		this.timestamp = timestamp;
-		this.databaseHelper = databaseHelper;
+		this.commuteTimeDao = commuteTimeDao;
 	}
 
 	public boolean onLongClick(View view)
 	{
-		CommuteTimeDao commuteTimeDao = new CommuteTimeDaoImpl(databaseHelper);
 		commuteTimeDao.updateTime(commuteEvent, timestamp, null);
-		this.textView.setText("");
+		textView.setText("");
 		return true;
 	}
 }

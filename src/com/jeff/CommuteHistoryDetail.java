@@ -14,7 +14,6 @@ import android.widget.TextView;
 
 public class CommuteHistoryDetail extends Activity
 {
-	private DatabaseHelper databaseHelper;
 	private CommuteTimeDao commuteTimeDao;
 	
 	private Long id;
@@ -23,8 +22,7 @@ public class CommuteHistoryDetail extends Activity
 	public void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		databaseHelper =  new DatabaseHelper(this);
-		commuteTimeDao = new CommuteTimeDaoImpl(databaseHelper);
+		commuteTimeDao = new CommuteTimeDaoImpl(new DatabaseHelper(this));
 		setContentView(R.layout.main);
 		
 		final Intent intent = getIntent();
@@ -34,26 +32,12 @@ public class CommuteHistoryDetail extends Activity
 	}
 
 	@Override
-	protected void onPause()
-	{
-		super.onPause();
-		closeDatabase();
-	}
-	
-	@Override
 	protected void onResume()
 	{
 		super.onResume();
 		initialize();
 	}
 
-	@Override
-	protected void onDestroy()
-	{
-		super.onDestroy();
-		closeDatabase();
-	}
-	
 	private void initialize()
 	{	
 		for (CommuteEvent commuteEvent : CommuteEvent.values())
@@ -62,7 +46,7 @@ public class CommuteHistoryDetail extends Activity
 			
 			Button button = (Button) findViewById(commuteEvent.buttonViewId());
 			button.setOnLongClickListener(new GenericOnLongClickListener((TextView) findViewById(commuteEvent
-					.textViewId()), commuteEvent, timestamp, databaseHelper));
+					.textViewId()), commuteEvent, timestamp, commuteTimeDao));
 			
 			TextView tv = (TextView) findViewById(commuteEvent.textViewId());
 			if (timestamp == null)
@@ -70,10 +54,5 @@ public class CommuteHistoryDetail extends Activity
 			else
 				tv.setText(DatabaseHelper.d_t(timestamp));
 		}
-	}
-
-	private void closeDatabase()
-	{
-		databaseHelper.close();
 	}
 }

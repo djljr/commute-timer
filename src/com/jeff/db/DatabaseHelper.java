@@ -24,7 +24,7 @@ public class DatabaseHelper extends SQLiteOpenHelper
 	@Override
 	public void onCreate(SQLiteDatabase database)
 	{
-		String createTableQuery = "create table daily_records(day date unique, left_home integer, train_platform1 integer, at_work integer, left_work integer, train_platform2 integer, at_home integer)";
+		String createTableQuery = "create table daily_records(_id integer primary key autoincrement, day text, left_home int, train_platform1 int, at_work int, left_work int, train_platform2 int, at_home int)";
 		database.execSQL(createTableQuery);
 	}
 

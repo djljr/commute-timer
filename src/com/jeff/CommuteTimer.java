@@ -16,12 +16,11 @@ import android.widget.TextView;
 
 public class CommuteTimer extends Activity
 {
-	private DatabaseHelper databaseHelper;
-	private CommuteTimeDao commuteTimeDao;
-
 	private static final int STATS_ID = Menu.FIRST;
 	private static final int HISTORY_ID = Menu.FIRST + 2;
 
+	private CommuteTimeDao commuteTimeDao;
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu)
 	{
@@ -54,17 +53,9 @@ public class CommuteTimer extends Activity
 	public void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		databaseHelper = new DatabaseHelper(this);
-		commuteTimeDao = new CommuteTimeDaoImpl(databaseHelper);
 		setContentView(R.layout.main);
+		commuteTimeDao = new CommuteTimeDaoImpl(new DatabaseHelper(this));
 		initialize();
-	}
-
-	@Override
-	protected void onPause()
-	{
-		super.onPause();
-		closeDatabase();
 	}
 
 	@Override
@@ -74,24 +65,16 @@ public class CommuteTimer extends Activity
 		initialize();
 	}
 
-	@Override
-	protected void onDestroy()
-	{
-		super.onDestroy();
-		closeDatabase();
-	}
-
 	private void initialize()
 	{
 		Date today = new Date();
-
 		for (CommuteEvent commuteEvent : CommuteEvent.values())
 		{
 			Button button = (Button) findViewById(commuteEvent.buttonViewId());
 			button.setOnClickListener(new RecordTimeOnClickListener((TextView) findViewById(commuteEvent.textViewId()),
-					commuteEvent, databaseHelper));
+					commuteEvent, commuteTimeDao));
 			button.setOnLongClickListener(new GenericOnLongClickListener((TextView) findViewById(commuteEvent
-					.textViewId()), commuteEvent, new Date(), databaseHelper));
+					.textViewId()), commuteEvent, new Date(), commuteTimeDao));
 
 			TextView tv = (TextView) findViewById(commuteEvent.textViewId());
 			Date timestamp = commuteTimeDao.getTimeStampByCommuteEventAndDay(commuteEvent, today);
@@ -100,10 +83,5 @@ public class CommuteTimer extends Activity
 			else
 				tv.setText(DatabaseHelper.d_t(timestamp));
 		}
-	}
-
-	private void closeDatabase()
-	{
-		databaseHelper.close();
 	}
 }
