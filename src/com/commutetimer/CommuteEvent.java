@@ -1,4 +1,4 @@
-package com.jeff;
+package com.commutetimer;
 
 public enum CommuteEvent
 {

@@ -1,4 +1,4 @@
-package com.jeff.db;
+package com.commutetimer.db;
 
 import java.util.Date;
 
@@ -6,7 +6,7 @@ import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.jeff.CommuteEvent;
+import com.commutetimer.CommuteEvent;
 
 public class CommuteTimeDaoImpl implements CommuteTimeDao
 {
@@ -113,7 +113,6 @@ public class CommuteTimeDaoImpl implements CommuteTimeDao
 		}
 	}
 
-	@Override
 	public String[] fetchStats() 
 	{
 		Cursor c = null;
@@ -141,14 +140,12 @@ public class CommuteTimeDaoImpl implements CommuteTimeDao
 		}
 	}
 
-	@Override
 	public void clearDb() 
 	{
 		SQLiteDatabase db = databaseHelper.getWritableDatabase();
 		db.delete("daily_records", null, new String[] { });
 	}
 
-	@Override
 	public Cursor fetchDaysWithData()
 	{
 		Cursor c = null;

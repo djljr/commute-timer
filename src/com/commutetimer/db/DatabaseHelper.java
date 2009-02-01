@@ -1,4 +1,4 @@
-package com.jeff.db;
+package com.commutetimer.db;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

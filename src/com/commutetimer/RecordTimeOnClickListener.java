@@ -1,11 +1,11 @@
-package com.jeff;
+package com.commutetimer;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import com.jeff.db.CommuteTimeDao;
-import com.jeff.db.CommuteTimeDaoImpl;
-import com.jeff.db.DatabaseHelper;
+import com.commutetimer.db.CommuteTimeDao;
+import com.commutetimer.db.CommuteTimeDaoImpl;
+import com.commutetimer.db.DatabaseHelper;
 
 import android.util.Log;
 import android.view.View;

@@ -1,10 +1,10 @@
-package com.jeff;
+package com.commutetimer;
 
 import java.util.Date;
 
-import com.jeff.db.CommuteTimeDao;
-import com.jeff.db.CommuteTimeDaoImpl;
-import com.jeff.db.DatabaseHelper;
+import com.commutetimer.db.CommuteTimeDao;
+import com.commutetimer.db.CommuteTimeDaoImpl;
+import com.commutetimer.db.DatabaseHelper;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -37,11 +37,11 @@ public class CommuteTimer extends Activity
 		switch (item.getItemId())
 		{
 		case STATS_ID:
-			intent.setClassName("com.jeff", "com.jeff.CommuteEventStats");
+			intent.setClassName("com.commutetimer", "com.commutetimer.CommuteEventStats");
 			startActivity(intent);
 			return true;
 		case HISTORY_ID:
-			intent.setClassName("com.jeff", "com.jeff.CommuteHistory");
+			intent.setClassName("com.commutetimer", "com.commutetimer.CommuteHistory");
 			startActivity(intent);
 			return true;
 		}

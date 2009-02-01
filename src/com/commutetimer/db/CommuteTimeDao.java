@@ -1,10 +1,10 @@
-package com.jeff.db;
+package com.commutetimer.db;
 
 import java.util.Date;
 
 import android.database.Cursor;
 
-import com.jeff.CommuteEvent;
+import com.commutetimer.CommuteEvent;
 
 public interface CommuteTimeDao
 {
